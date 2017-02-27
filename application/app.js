@@ -16,12 +16,17 @@ app.post('/login', function (req, res) {
         'login': req.body.un,
         'pw': req.body.pw
     });
-
+    //console.log(JSON.stringify(post_data));
     PostCode(post_data);
-
+    console.log(res.response);
 });
 
+/*app.post('/success', function(req,res){
+ console.log('Login: ' + req.body.login + ' Password: ' + req.body.pw + ' Token: ' + req.body.token);
+ res.redirect("http://localhost/secure.html");
+ });*/
 
+//function to send code to authentication server.
 function PostCode(post_data) {
 
 
