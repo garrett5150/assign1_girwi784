@@ -15,28 +15,24 @@ app.use(bodyParse.urlencoded({extended: false}));
 
 
 app.use('/secure', securerouter);
-securerouter.route('/').get(function (req, res) {
+securerouter.route('/').post(function (req, res) {
     var fn = __dirname + '/secure/secure.html';
     res.sendFile(fn);
 });
 
 app.use('/error', errorrouter);
-errorrouter.route('/').get(function(req, res){
+errorrouter.route('/').get(function (req, res) {
     var fn = __dirname + '/public/error.html';
     res.sendFile(fn);
 });
 
 app.use('/', indexrouter);
-indexrouter.route('/').get(function(req, res){
+indexrouter.route('/').get(function (req, res) {
     var fn = __dirname + '/public/index.html';
     res.sendFile(fn);
 });
 
 app.post('/login', function (req, res) {
-    var post_data = querystring.stringify({
-        'login': req.body.un,
-        'pw': req.body.pw
-    });
 
     var post_options = {
         host: 'localhost',
@@ -44,24 +40,32 @@ app.post('/login', function (req, res) {
         path: '/login',
         method: 'POST',
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Content-Length': Buffer.byteLength(post_data)
+            "login": req.body.uname,
+            "pw": req.body.psw,
+            'Content-Length': Buffer.byteLength()
         }
     };
 
-    var post_req = http.request(post_options, function (resp) {
+    http.request(post_options).on('response', function (resp) {
         resp.setEncoding('utf8');
+        var data = "";
+
         resp.on('data', function (chunk) {
-            var token = JSON.parse(chunk);
-            if (token.token == "abcd") {
-                res.send(token);
-            }else{
-                res.send(token);
+            data = JSON.parse(chunk);
+        });
+        resp.on('end', function () {
+            console.log(data);
+            console.log(data.token);
+            if (data.token == "abcd") {
+                var fn = __dirname + '/secure/secure.html';
+                res.sendFile(fn);
+            } else {
+                var fn = __dirname + '/public/error.html';
+                res.sendFile(fn);
             }
         });
-    });
-    post_req.write(post_data);
-    post_req.end();
+    }).end();
+
 });
 
 var server = app.listen(3001, function () {

@@ -23,30 +23,24 @@ app.post('/login', function(req, res)
             obj = JSON.parse(data);
             for (var i=0; i <= obj.table.length ; i++){
                 var temp = obj.table.pop();
-                if(temp.login == req.body.login)
+                if(temp.login == req.headers.login)
                 {
-                    if(temp.pw == req.body.pw)
+                    if(temp.pw == req.headers.pw)
                     {
                         //login and password match the JSON file
-                        res.setHeader('Content-Type', 'application/json');
                         success = 1;
-                        res.send(JSON.stringify({
+                        res.json({
                             'login': temp.login,
                             'pw': temp.pw,
                             'token': temp.token
-                        }));
-                    }else{
-
+                        });
+                        console.log(temp.token);
+                        return res.end();
                     }
-                }else
-                {
-
                 }
             }
-            if (success == 0){
-                res.setHeader('Content-Type', 'application/json');
-                res.send(JSON.stringify('{ login: false, pw: false, token: false }'));
-            }
+                res.json({ 'login': false, pw: 'false', 'token': false });
+                return res.end();
         }
         });
 });
