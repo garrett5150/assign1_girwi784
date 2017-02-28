@@ -13,7 +13,6 @@ app.post('/login', function(req, res)
 {
     var errlog = [];
     var obj = {table:[]};
-    console.log('Login: ' + req.body.login + ' Password: ' + req.body.pw);
     fs.readFile('users.json', 'utf8', function readFile(err, data){
         if(err)
         {
@@ -28,15 +27,12 @@ app.post('/login', function(req, res)
                     if(temp.pw == req.body.pw)
                     {
                         //login and password match the JSON file
-                        //console.log("success!");
-                        var post_data = querystring.stringify({
+                        res.setHeader('Content-Type', 'application/json');
+                        res.send(JSON.stringify({
                             'login': temp.login,
                             'pw': temp.pw,
                             'token': temp.token
-                        });
-                        var data = JSON.stringify(post_data);
-                        res.send(data);
-                        //PostCode(post_data);
+                        }));
                     }else{
                         errlog.push("invalid Password");
                     }
@@ -71,32 +67,6 @@ function createUser(username, password, rol)
            fs.writeFile('users.json', json, 'utf8');
        }
     });
-}
-
-//function to send code to app server VIA post.
-function PostCode(post_data) {
-
-
-    var post_options = {
-        host: 'localhost',
-        port: '3001',
-        path: '/success',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Content-Length': Buffer.byteLength(post_data)
-        }
-    };
-
-    var post_req = http.request(post_options, function (res) {
-        res.setEncoding('utf8');
-        res.on('data', function (chunk) {
-            console.log('Response: ' + chunk);
-        });
-    });
-
-    post_req.write(post_data);
-    post_req.end();
 }
 
 
