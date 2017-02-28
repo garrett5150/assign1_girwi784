@@ -5,18 +5,42 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <title>Secure Html</title>
 </head>
-<!--<script>
+<script>
 
     $(document).ready(function()
     {
-
+        $.post('/generateuser', function(data)
+        {
+            $('#name').html("Login: " + data.login);
+            $('#role').html("Role: " + data.role);
+        });
     });
-</script>-->
+</script>
 <body>
 
 <h2>Secure Login</h2>
+<div class="header">
+    <h1 id="name"></h1>
+</div>
+
 <div class="container">
-    Welcome to secure.html
+    <h1 id="role"></h1>
+</div>
+<br/>
+
+
+
+<h2>Create User</h2>
+<div class="container">
+    <form method="post" action="/addgenuser">
+        <label><b>Username</b></label>
+        <input type="text" id="un" placeholder="Enter Username" name="uname" required>
+
+        <label><b>Password</b></label>
+        <input type="password" id="pw" placeholder="Enter Password" name="psw" required>
+        <br />
+        <button id="btn-submit" type="submit">Login</button>
+    </form>
 </div>
 
 
