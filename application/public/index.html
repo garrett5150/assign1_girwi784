@@ -13,8 +13,10 @@
             var pw=$("#psw").val();
             $.post('/login', {"un":un, "pw":pw}, function(data)
             {
-                if(data){
+                if(data && data.token == "abcd"){
                     window.location = "http://localhost:3001/secure";
+                }else{
+                    window.location = "http://localhost:3001/error";
                 }
             });
         });

@@ -8,6 +8,7 @@ var bodyParse = require('body-parser');
 app.use(bodyParse.urlencoded({extended:false}));
 var http = require('http');
 var querystring = require('querystring');
+var success = 0;
 
 app.post('/login', function(req, res)
 {
@@ -28,18 +29,23 @@ app.post('/login', function(req, res)
                     {
                         //login and password match the JSON file
                         res.setHeader('Content-Type', 'application/json');
+                        success = 1;
                         res.send(JSON.stringify({
                             'login': temp.login,
                             'pw': temp.pw,
                             'token': temp.token
                         }));
                     }else{
-                        errlog.push("invalid Password");
+
                     }
                 }else
                 {
-                    errlog.push("invalid Login");
+
                 }
+            }
+            if (success == 0){
+                res.setHeader('Content-Type', 'application/json');
+                res.send(JSON.stringify('{ login: false, pw: false, token: false }'));
             }
         }
         });

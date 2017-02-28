@@ -3,6 +3,8 @@
  */
 var express = require('express');
 var securerouter = express.Router();
+var errorrouter = express.Router();
+var indexrouter = express.Router();
 var app = express();
 var fs = require('fs');
 var bodyParse = require('body-parser');
@@ -18,6 +20,17 @@ securerouter.route('/').get(function (req, res) {
     res.sendFile(fn);
 });
 
+app.use('/error', errorrouter);
+errorrouter.route('/').get(function(req, res){
+    var fn = __dirname + '/public/error.html';
+    res.sendFile(fn);
+});
+
+app.use('/', indexrouter);
+indexrouter.route('/').get(function(req, res){
+    var fn = __dirname + '/public/index.html';
+    res.sendFile(fn);
+});
 
 app.post('/login', function (req, res) {
     var post_data = querystring.stringify({
@@ -41,8 +54,9 @@ app.post('/login', function (req, res) {
         resp.on('data', function (chunk) {
             var token = JSON.parse(chunk);
             if (token.token == "abcd") {
-                //req.session.token = "true"
-                res.redirect("/secure");
+                res.send(token);
+            }else{
+                res.send(token);
             }
         });
     });
