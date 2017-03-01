@@ -10,32 +10,27 @@ var http = require('http');
 var querystring = require('querystring');
 var success = 0;
 
+
+//adding a generic user (not admin) for application/app.js
 app.post('/addgenuser', function(req, res){
-    console.log(req.headers.login);
-    var temp = createUser(req.headers.login, req.headers.pw, req.headers.role, "abcd");
-    if (temp == "true")
-    {
-        res.json({'success': "true"});
-        return res.end();
-    }else{
-        res.json({'success': "false"});
-        return res.end();
-    }
+    createUser(req.headers.login, req.headers.pw, req.headers.role, "abcd");
+    return res.end();
 });
 
+
+//login function for application/app.js
 app.post('/login', function(req, res)
 {
-    var errlog = [];
-    var obj = {table:[]};
-    fs.readFile('users.json', 'utf8', function readFile(err, data){
+    //var obj = {table:[]};
+    fs.readFile('users.json', 'utf8', function rdFile(err, data){
         if(err)
         {
             console.log(err);
             throw err;
         }else {
-            obj = JSON.parse(data);
-            for (var i=0; i <= obj.table.length ; i++){
-                var temp = obj.table.pop();
+            var obj = JSON.parse(data);
+            for (var i=0; i < obj.table.length ; i++){
+                var temp = obj.table[i];
                 if(temp.login == req.headers.login)
                 {
                     if(temp.pw == req.headers.pw)
@@ -73,13 +68,14 @@ function createUser(username, password, rol, tok)
        if(err)
        {
            console.log(err);
-           return "false";
        }else{
            obj = JSON.parse(data);
-           obj.table.push({login:username, pw:password, role:rol, token:tok});
+           obj.table.push({login:username,
+               pw:password,
+               role:rol,
+               token:tok});
            var json = JSON.stringify(obj);
            fs.writeFile('users.json', json, 'utf8');
-           return "true";
        }
     });
 }

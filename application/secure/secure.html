@@ -9,6 +9,10 @@
 
     $(document).ready(function()
     {
+        var pathname = window.location.pathname;
+        if(pathname == '/addgenuser'){
+            $('#result').html("User successfully added!");
+        }
         $.post('/generateuser', function(data)
         {
             $('#name').html("Login: " + data.login);
@@ -42,7 +46,7 @@
         <button id="btn-submit" type="submit">Login</button>
     </form>
 </div>
-
+<h3 id="result"></h3>
 
 </body>
 </html>

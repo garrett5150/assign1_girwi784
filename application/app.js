@@ -50,7 +50,6 @@ app.post('/generateuser', function (req, res) {
     return res.end();
 });
 
-
 //handles the login on 3001
 app.post('/login', function (req, res) {
 
@@ -116,7 +115,8 @@ app.post('/addgenuser', function(req, res){
         });
         resp.on('end', function () {
             console.log(data);
-            res.send(data);
+            var fn = __dirname + '/secure/secure.html';
+            res.sendFile(fn);
             //successful
         });
     }).end();
