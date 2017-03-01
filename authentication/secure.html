@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <title>Authentication Secure Html</title>
+</head>
+<script>
+
+    $(document).ready(function()
+    {
+        var pathname = window.location.pathname;
+        if(pathname == '/adduser'){
+            $('#result').html("User successfully added!");
+        }
+        if(pathname == '/removeuser'){
+            $('#result').html("User successfully Removed!");
+        }
+        $.post('/generateauthuser', function(data)
+        {
+            $('#name').html("Login: " + data.login);
+            $('#userrole').html("Role: " + data.role);
+        });
+
+        $("#createuserbtn").click(function() {
+            $("#createuser").toggle();
+        });
+        $("#removeuserbtn").click(function() {
+            $("#removeuser").toggle();
+        });
+    });
+</script>
+<body>
+
+<h2>Secure Login</h2>
+<div class="header">
+    <h1 id="name"></h1>
+</div>
+
+<div class="container">
+    <h1 id="userrole"></h1>
+</div>
+<br/>
+
+
+
+
+<div class="container" >
+    <button id="createuserbtn">Add User</button>
+    <button id="removeuserbtn">Remove User</button>
+
+    <br />
+    <form method="post" action="/adduser" id="createuser" style="display:none;">
+        <label><b>Username</b></label>
+        <input type="text" id="un" placeholder="Enter Username" name="uname" required>
+
+        <label><b>Password</b></label>
+        <input type="password" id="pw" placeholder="Enter Password" name="psw" required>
+        <select name="role" id="role">
+            <option value="user">User</option>
+            <option value="administrator">Administrator</option>
+        </select>
+        <br />
+        <button id="btn-submituser" type="submit">Create User</button>
+    </form>
+
+    <form method="post" action="/removeuser" id="removeuser" style="display:none;">
+        <label><b>Username</b></label>
+        <input type="text" id="username" placeholder="Enter Username" name="uname" required>
+        <br />
+        <button id="btn-removeuser" type="submit">Create User</button>
+    </form>
+</div>
+<h3 id="result"></h3>
+
+</body>
+</html>

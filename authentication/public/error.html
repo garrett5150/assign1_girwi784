@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <title>Error Html</title>
+</head>
+<script>
+
+    $(document).ready(function()
+    {
+        $('#btn-submit').click(function() {
+                    window.location = "http://localhost:3002/";
+        });
+    });
+</script>
+<body>
+
+<h2>Error 404</h2>
+<div class="container">
+    Incorret login/password or you do not have the correct permissions. Please click below to login <br />
+    <button id="btn-submit" type="submit">Proceed to Login</button>
+</div>
+
+
+</body>
+</html>
