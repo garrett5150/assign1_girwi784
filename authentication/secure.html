@@ -7,26 +7,31 @@
 </head>
 <script>
 
-    $(document).ready(function()
-    {
+    $(document).ready(function () {
         var pathname = window.location.pathname;
-        if(pathname == '/adduser'){
+        if (pathname == '/adduser') {
             $('#result').html("User successfully added!");
         }
-        if(pathname == '/removeuser'){
+        if (pathname == '/removeuser') {
             $('#result').html("User successfully Removed!");
         }
-        $.post('/generateauthuser', function(data)
-        {
+        if (pathname == '/modifyuser') {
+            $('#result').html("User successfully Modified!");
+        }
+
+        $.post('/generateauthuser', function (data) {
             $('#name').html("Login: " + data.login);
             $('#userrole').html("Role: " + data.role);
         });
 
-        $("#createuserbtn").click(function() {
+        $("#createuserbtn").click(function () {
             $("#createuser").toggle();
         });
-        $("#removeuserbtn").click(function() {
+        $("#removeuserbtn").click(function () {
             $("#removeuser").toggle();
+        });
+        $("#modifyuserbtn").click(function () {
+            $("#modifyuser").toggle();
         });
     });
 </script>
@@ -43,32 +48,50 @@
 <br/>
 
 
-
-
-<div class="container" >
+<div class="container">
     <button id="createuserbtn">Add User</button>
     <button id="removeuserbtn">Remove User</button>
+    <button id="modifyuserbtn">Modify User</button>
 
-    <br />
+    <br/>
     <form method="post" action="/adduser" id="createuser" style="display:none;">
         <label><b>Username</b></label>
         <input type="text" id="un" placeholder="Enter Username" name="uname" required>
 
         <label><b>Password</b></label>
         <input type="password" id="pw" placeholder="Enter Password" name="psw" required>
+        <label for="role"><b>Role</b></label>
         <select name="role" id="role">
             <option value="user">User</option>
             <option value="administrator">Administrator</option>
         </select>
-        <br />
+        <br/>
         <button id="btn-submituser" type="submit">Create User</button>
     </form>
 
     <form method="post" action="/removeuser" id="removeuser" style="display:none;">
         <label><b>Username</b></label>
         <input type="text" id="username" placeholder="Enter Username" name="uname" required>
-        <br />
-        <button id="btn-removeuser" type="submit">Create User</button>
+        <br/>
+        <button id="btn-removeuser" type="submit">Remove User</button>
+    </form>
+
+    <form method="post" action="/modifyuser" id="modifyuser" style="display:none;">
+        <label><b>Old Username</b></label>
+        <input type="text" id="oldusername" placeholder="Enter Username" name="olduname">
+        <br/><label><b>New Username</b></label>
+        <input type="text" id="newusername" placeholder="Enter Username" name="newuname">
+        <br/><label><b>Old Password</b></label>
+        <input type="password" id="oldpw" placeholder="Enter Password" name="oldpsw">
+        <br/><label><b>New Password</b></label>
+        <input type="password" id="newpw" placeholder="Enter Password" name="newpsw">
+        <br/><label for="role"><b>New Role</b></label>
+        <select name="role" id="modifyrolw">
+            <option value="user">User</option>
+            <option value="administrator">Administrator</option>
+        </select>
+        <br/>
+        <button id="btn-modifyuser" type="submit">Modify User</button>
     </form>
 </div>
 <h3 id="result"></h3>

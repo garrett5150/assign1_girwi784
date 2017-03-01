@@ -11,10 +11,11 @@ var http = require('http');
 var querystring = require('querystring');
 var indexrouter = express.Router();
 var authlogin = express.Router();
+var sess;
+
 app.use(session({
     secret: 'ssshhhhh', proxy: true, resave: true, saveUninitialized: true
 }));
-var sess;
 
 app.post('/adduser', function (req, res) {
     createUser(req.body.uname, req.body.psw, req.body.role, "abcd");
@@ -24,6 +25,13 @@ app.post('/adduser', function (req, res) {
 
 app.post('/removeuser', function (req, res) {
     removeUser(req.body.uname);
+    var fn = __dirname + '/secure.html';
+    return res.sendFile(fn);
+});
+
+app.post('/modifyuser', function (req, res) {
+    modifyuser(req.body.olduname, req.body.newuname, req.body.oldpsw, req.body.newpsw, req.body.role);
+    console.log(req.body.olduname, req.body.newuname, req.body.oldpsw, req.body.newpsw, req.body.role);
     var fn = __dirname + '/secure.html';
     return res.sendFile(fn);
 });
@@ -131,7 +139,7 @@ var server = app.listen(3002, function () {
     console.log("Server Started at http://localhost:%s", port);
 });
 
-function removeUser(username){
+function removeUser(username) {
     var temp = {table: []};
     fs.readFile('users.json', 'utf8', function readFileCallback(err, data) {
         if (err) {
@@ -140,7 +148,8 @@ function removeUser(username){
             var obj = JSON.parse(data);
             for (var i = 0; i < obj.table.length; i++) {
                 if (obj.table[i].login == username) {
-                }else{
+
+                } else {
                     temp.table.push(obj.table[i]);
                 }
             }
@@ -148,6 +157,59 @@ function removeUser(username){
             fs.writeFile('users.json', json, 'utf8');
         }
     });
+}
+
+function modifyuser(oldusername, newusername, oldpw, newpw, role) {
+    var temp = {table: []};
+    fs.readFile('users.json', 'utf8', function readFileCallback(err, data) {
+            if (err) {
+                console.log(err);
+            } else {
+                var obj = JSON.parse(data);
+                for (var i = 0; i < obj.table.length; i++) {
+                    if (obj.table[i].login == oldusername && obj.table[i].pw == oldpw) {
+                        if(newusername != null && newpw != null)
+                        {
+                            temp.table.push({
+                                login: newusername,
+                                pw: newpw,
+                                role: role,
+                                token: "abcd"
+                            });
+                        }
+                    } else {
+                        if (obj.table[i].login == oldusername) {
+                            if(newusername != null)
+                            {
+                                temp.table.push({
+                                    login: newusername,
+                                    pw: oldpw,
+                                    role: role,
+                                    token: "abcd"
+                                });
+                            }
+                        }else{
+                            if (obj.table[i].pw == oldpw) {
+                                if(newpw != null)
+                                {
+                                    temp.table.push({
+                                        login: oldusername,
+                                        pw: newpw,
+                                        role: role,
+                                        token: "abcd"
+                                    });
+                                }
+                            }else{
+                                temp.table.push(obj.table[i]);
+                            }
+                        }
+                    }
+
+                }
+                var json = JSON.stringify(temp);
+                fs.writeFile('users.json', json, 'utf8');
+            }
+        });
 }
 
 function createUser(username, password, rol, tok) {
