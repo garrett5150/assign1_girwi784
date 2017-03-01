@@ -168,32 +168,29 @@ function modifyuser(oldusername, newusername, oldpw, newpw, role) {
                 var obj = JSON.parse(data);
                 for (var i = 0; i < obj.table.length; i++) {
                     if (obj.table[i].login == oldusername && obj.table[i].pw == oldpw) {
-                        if(newusername != null && newpw != null)
-                        {
                             temp.table.push({
                                 login: newusername,
                                 pw: newpw,
                                 role: role,
                                 token: "abcd"
                             });
-                        }
                     } else {
                         if (obj.table[i].login == oldusername) {
-                            if(newusername != null)
+                            if(newusername != "")
                             {
                                 temp.table.push({
                                     login: newusername,
-                                    pw: oldpw,
+                                    pw: obj.table[i].pw,
                                     role: role,
                                     token: "abcd"
                                 });
                             }
                         }else{
                             if (obj.table[i].pw == oldpw) {
-                                if(newpw != null)
+                                if(newpw != "")
                                 {
                                     temp.table.push({
-                                        login: oldusername,
+                                        login: obj.table[i].login,
                                         pw: newpw,
                                         role: role,
                                         token: "abcd"

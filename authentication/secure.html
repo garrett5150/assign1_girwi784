@@ -78,13 +78,13 @@
 
     <form method="post" action="/modifyuser" id="modifyuser" style="display:none;">
         <label><b>Old Username</b></label>
-        <input type="text" id="oldusername" placeholder="Enter Username" name="olduname">
+        <input type="text" id="oldusername" placeholder="Enter Username" name="olduname" required>
         <br/><label><b>New Username</b></label>
-        <input type="text" id="newusername" placeholder="Enter Username" name="newuname">
+        <input type="text" id="newusername" placeholder="Enter Username" name="newuname" required>
         <br/><label><b>Old Password</b></label>
-        <input type="password" id="oldpw" placeholder="Enter Password" name="oldpsw">
+        <input type="password" id="oldpw" placeholder="Enter Password" name="oldpsw" required>
         <br/><label><b>New Password</b></label>
-        <input type="password" id="newpw" placeholder="Enter Password" name="newpsw">
+        <input type="password" id="newpw" placeholder="Enter Password" name="newpsw" required>
         <br/><label for="role"><b>New Role</b></label>
         <select name="role" id="modifyrolw">
             <option value="user">User</option>
